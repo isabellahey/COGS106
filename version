@@ -1,2 +1,5 @@
-January 26, 2023 
-15:10pm
+#!/bin/bash
+
+current date=$(date +"%T")
+echo "current date : $now"
+
