@@ -51,5 +51,15 @@ classdef SignalDetection
             ylim([0,1])
             title('ROC Curve')
         end
+          function plot_sdt = plot_sdt(obj)
+            z= [-6:.2:6];
+            Noise= normpdf(z,0,1);
+            Signal= normpdf(z,obj.d_prime,1);
+            plot(z,Noise,z, Signal)
+            xlabel('Signal Strength')
+            ylabel('Probability of Occurence')
+            legend('Noise','Signal')
+            title('SDT PLot')
+        end
     end
 end           
