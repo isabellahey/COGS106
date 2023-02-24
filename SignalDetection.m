@@ -39,5 +39,17 @@ classdef SignalDetection
             Multiplied = SignalDetection(obj.hits .* k, obj.misses .* k, obj.falseAlarms .* k, ...
                 obj.correctRejections .* k);
         end
+        
+          %% Plots
+        function plot_roc = plot_roc(obj)
+            x= [0,obj.falsealarms_rate,1];
+            y= [0,obj.hits_rate,1];
+            plot(x,y)
+            xlabel('False Alarm Rate')
+            ylabel('Hit Rate')
+            xlim([0,1])
+            ylim([0,1])
+            title('ROC Curve')
+        end
     end
 end           
