@@ -28,5 +28,16 @@ classdef SignalDetection
         function criterion = criterion(obj)
             criterion = -0.5 * (norminv(obj.hits_rate) + norminv(obj.falsealarms_rate));
         end
+        
+        %% Operator Overloading
+        function Total = plus(objx,objy)
+            Total = SignalDetection(objx.hits + objy.hits, objx.misses + objy.misses, objx.falseAlarms + objy.falseAlarms, ...
+                objx.correctRejections + objy.correctRejections);
+        end
+        
+        function Multiplied = mtimes(obj, k)
+            Multiplied = SignalDetection(obj.hits .* k, obj.misses .* k, obj.falseAlarms .* k, ...
+                obj.correctRejections .* k);
+        end
     end
 end           
