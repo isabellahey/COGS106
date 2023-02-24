@@ -56,6 +56,7 @@ classdef SignalDetection
             Noise= normpdf(z,0,1);
             Signal= normpdf(z,obj.d_prime,1);
             plot(z,Noise,z, Signal)
+            line([0 obj.d_prime],[max(Noise), max(Signal)])
             xlabel('Signal Strength')
             ylabel('Probability of Occurence')
             legend('Noise','Signal')
