@@ -38,3 +38,21 @@ function testCriterionNonzero(testCase)
   
 end
 
+function testCorruptedObject(testCase)
+    % create object with arbitrary values
+    sd = SignalDetection(10, 5, 2, 8);
+
+    % corrupt object by changing properties
+    sd.hits = 0;
+    sd.misses = 0;
+    sd.falseAlarms = 0;
+    sd.correctRejections = 0;
+
+    % check if hit rate and false alarm rate are NaN
+    verifyTrue(testCase, isnan(sd.hits_rate()));
+    verifyTrue(testCase, isnan(sd.falsealarms_rate()));
+
+    % check if d' and criterion are NaN
+    verifyTrue(testCase, any(isnan(sd.d_prime())));
+    verifyTrue(testCase, any(isnan(sd.criterion())));
+end
