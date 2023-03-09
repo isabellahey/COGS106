@@ -63,5 +63,17 @@ classdef SignalDetection
             legend('Noise','Signal')
             title('SDT PLot')
         end
+        
+        methods (Static)
+        function sdtList = simulate(dprime,criteriaList,signalCount,noiseCount)
+            k = criterionList + (dprime/2)
+            for i = 2:length(t)
+                hits_p = 1 - normcdf(k - dprime);
+                falsealarms_p = 1 - normcdf(k);
+            end
+            hits = binornd(signalCount, hits_p)
+            falsealarms = binornd(noiseCount, falsealarms_p)
+         
+        end
     end
 end           
