@@ -66,14 +66,19 @@ classdef SignalDetection
         
         methods (Static)
         function sdtList = simulate(dprime,criteriaList,signalCount,noiseCount)
-            k = criterionList + (dprime/2)
-            for i = 2:length(t)
-                hits_p = 1 - normcdf(k - dprime);
-                falsealarms_p = 1 - normcdf(k);
-            end
-            hits = binornd(signalCount, hits_p)
-            falsealarms = binornd(noiseCount, falsealarms_p)
          
+         k = criterionList + (dprime/2);
+            hits_p = 1 - normcdf(k - dprime);
+            falsealarms_p = 1 - normcdf(k);
+            sdtList = zeros(size(SignalDetection));
+
+            for i = 1:length(criteriaList)
+                hits = binornd(hits_p, signalCount);
+                misses = normcdf(k-dprime);
+                falseAlarms = bionrnd(falsealarms_p, noiseCount);
+                correctRejections = normcdf(k);
+                sdtList(i) = SignalDetection(hits, misses, falseAlarms, correctRejections);
+            end
         end
     end
 end           
