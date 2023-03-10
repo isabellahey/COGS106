@@ -104,5 +104,30 @@ end
             ylabel('hit rate')
             title('ROC curve')
         end
+        
+        function hitRate = rocCurve(falseAlarmRate, a)
+            hitRate = [];
+            for i = 1:length(falseAlarmRate)
+                hitRate = [hitRate; normcdf(a + norminv(falseAlarmRate(i)))];
+            end
+        end
+        function rocLoss = rocLoss(a, sdtList)
+            
+            ell = [];
+
+            for i = 1:length(sdtList)
+                obs_falsealarms_rate = falsealarms_rate(sdtList(i));
+                pre_hits_rate = SignalDetection.rocCurve(obs_falsealarms_rate, a);
+                ell(i) = nLogLikelihood(sdtList(i), pre_hits_rate, obs_falsealarms_rate);
+            end
+            rocLoss = sum(ell);
+            rocLoss = rocLoss(1);
+        end
+        
+        function fit_roc = fit_roc(sdtList)
+            fun = @(a) SignalDetection.rocLoss(a, sdtList);
+            start = [0];
+            fit_roc = fminsearch(fun, start)
+        end
     end
 end           
