@@ -64,11 +64,18 @@ classdef SignalDetection
             title('SDT PLot')
         end
         
+            function ell = nLogLikelihood(obj, hitRate, falseAlarmsRate)
+            ell = -obj.hits*log(hitRate) - obj.misses*log(1 - hitRate)...
+                - obj.falseAlarms* log(falseAlarmsRate)...
+                - obj.correctRejections* log(1 - falseAlarmsRate);
+    end
+end
+        
         methods (Static)
         
-        function sdtList = simulate(dprime,criteriaList,signalCount,noiseCount)
+           function sdtList = simulate(dprime,criteriaList,signalCount,noiseCount)
          
-       sdtList = [];
+             sdtList = [];
             for i = 1:length(criteriaList)
                 k = criteriaList(i) + (dprime/2);
                 hits_p = 1 - normcdf(k - dprime);
@@ -82,11 +89,20 @@ classdef SignalDetection
             end
         end
         
-        function ell = nLogLikelihood(obj, hitRate, falseAlarmsRate)
-
-          ell = - (obj.hits * log(hitRate) + obj.misses * log(1 - hitRate)...
-                + obj.falseAlarms * log(falseAlarmRate)...
-                + obj.correctRejections * log(1 - falseAlarmsRate));
+         function plot_Roc = plot_Roc(sdtList)
+            hold on;
+            for i = 1:length(sdtList)
+                x = sdtList(i).falsealarms_rate();
+                y= sdtList(i).hits_rate();
+            end
+            line([0,1], [0,1], 'LineStyle', '-');
+            grid on
+            hold off;
+            xlim([0,1])
+            ylim([0,1])
+            xlabel('false alarm rate')
+            ylabel('hit rate')
+            title('ROC curve')
         end
     end
 end           
