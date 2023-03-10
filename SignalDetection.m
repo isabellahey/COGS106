@@ -121,7 +121,6 @@ end
                 ell(i) = nLogLikelihood(sdtList(i), pre_hits_rate, obs_falsealarms_rate);
             end
             rocLoss = sum(ell);
-            rocLoss = rocLoss(1);
         end
         
         function fit_roc = fit_roc(sdtList)
