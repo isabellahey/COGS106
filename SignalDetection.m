@@ -117,8 +117,7 @@ end
             for i = 1:length(sdtList)
                 obs_falsealarms_rate = falsealarms_rate(sdtList(i));
                 pre_hits_rate = SignalDetection.rocCurve(obs_falsealarms_rate, a);
-                ell(i) = sdtList(i).nLogLikelihood(pre_hits_rate, obs_falsealarms_rate);
-
+                ell = [ell; nLogLikelihood(sdtList(i), pre_hits_rate, obs_falsealarms_rate);
             end
             rocLoss = sum(ell);
         end
