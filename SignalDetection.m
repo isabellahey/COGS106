@@ -65,20 +65,28 @@ classdef SignalDetection
         end
         
         methods (Static)
+        
         function sdtList = simulate(dprime,criteriaList,signalCount,noiseCount)
          
-         k = criterionList + (dprime/2);
-            hits_p = 1 - normcdf(k - dprime);
-            falsealarms_p = 1 - normcdf(k);
-            sdtList = zeros(size(SignalDetection));
-
+       sdtList = [];
             for i = 1:length(criteriaList)
-                hits = binornd(hits_p, signalCount);
-                misses = normcdf(k-dprime);
-                falseAlarms = bionrnd(falsealarms_p, noiseCount);
-                correctRejections = normcdf(k);
-                sdtList(i) = SignalDetection(hits, misses, falseAlarms, correctRejections);
+                k = criteriaList(i) + (dprime/2);
+                hits_p = 1 - normcdf(k - dprime);
+                falsealarms_p = normcdf(k);
+
+                hits = binornd(signalCount, hits_p);
+                misses = signalCount - hits;
+                falseAlarms = binornd(noiseCount, falsealarms_p);
+                correctRejections = noiseCount - falseAlarms;
+                sdtList = [sdtList; SignalDetection(hits, misses, falseAlarms, correctRejections)];
             end
+        end
+        
+        function ell = nLogLikelihood(obj, hitRate, falseAlarmsRate)
+
+          ell = - (obj.hits * log(hitRate) + obj.misses * log(1 - hitRate)...
+                + obj.falseAlarms * log(falseAlarmRate)...
+                + obj.correctRejections * log(1 - falseAlarmsRate));
         end
     end
 end           
