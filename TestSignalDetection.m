@@ -86,10 +86,10 @@ function test_simulate_single(testCase)
     testCase.verifyEqual(length(sdtList), 1);
     sdt = sdtList(1);
     
-    testCase.verifyEqual(sdt.Hits, sdtList(1).Hits);
-    testCase.verifyEqual(sdt.Misses, sdtList(1).Misses);
-    testCase.verifyEqual(sdt.FalseAlarms, sdtList(1).FalseAlarms);
-    testCase.verifyEqual(sdt.CorrectRejections, sdtList(1).CorrectRejections);
+    testCase.verifyEqual(sdt.hits, sdtList(1).hits);
+    testCase.verifyEqual(sdt.misses, sdtList(1).misses);
+    testCase.verifyEqual(sdt.falseAlarms, sdtList(1).falseAlarms);
+    testCase.verifyEqual(sdt.correctRejections, sdtList(1).correctRejections);
 end
 
 function test_simulate_multiple(testCase)
@@ -105,10 +105,10 @@ function test_simulate_multiple(testCase)
     testCase.verifyEqual(length(sdtList), 3);
     for i = 1:length(sdtList)
         sdt = sdtList(i);
-        testCase.verifyLessThanOrEqual(sdt.Hits, signalCount);
-        testCase.verifyLessThanOrEqual(sdt.Misses, signalCount);
-        testCase.verifyLessThanOrEqual(sdt.FalseAlarms, noiseCount);
-        testCase.verifyLessThanOrEqual(sdt.CorrectRejections, noiseCount);
+        testCase.verifyLessThanOrEqual(sdt.hits, signalCount);
+        testCase.verifyLessThanOrEqual(sdt.misses, signalCount);
+        testCase.verifyLessThanOrEqual(sdt.falseAlarms, noiseCount);
+        testCase.verifyLessThanOrEqual(sdt.correctRejections, noiseCount);
     end
 end
 
