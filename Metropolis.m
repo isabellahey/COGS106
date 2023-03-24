@@ -18,40 +18,38 @@ classdef Metropolis
             obj.accProb = 0;
             obj.samples = [];
         end
-    end
-        
-        methods (Access = private)
-        function yesno = accept(obj, proposal)
-            logAccProb = obj.logTarget(proposal) - obj.logTarget(obj.state);
-            if logAccProb >= 0
-                yesno = true;
-            else
-                accProb = exp(logAccProb);
-                if rand < accProb
-                    yesno = true;
-                else
-                    yesno = flase;
-                end
-            end
-            obj.accProb = (obj.accProb + yesno) / 2;
         
         function obj = adapt(obj, blockLengths)
-            targetAcceptRate = 0.4;
             nBlocks = length(blockLengths);
             acceptRates = zeros(1, nBlocks);
             for i = 1:nBlocks
+                acceptances = zeros(1, blocklengths(i));
                 for j = 1:blockLengths(i)
                     proposal = obj.state + obj.sigma * randn();
-                    obj.accept(proposal);
+                    if obj.accept(proposal);
+                    obj.state = proposal;
+                    acceptances(j) = 1;
                 end
+            end 
                 acceptRates(i) = mean(acceptances);
             end
             meanAcceptRate = mean(acceptRates);
+            targetAcceptRate = 0.4;
             adjFactor = meanAcceptRate / targetAcceptRate;
             if adjFactor > 1.2
                 obj.sigma = obj.sigma / adjFactor;
             elseif adjFactor < 0.8
                 obj.sigma = obj.sigma * adjFactor;
+            end
+        end
+        
+        function yesno = accept(obj, proposal)
+            logRatio = obj.logTarget(proposal) - obj.logTarget(obj.state);
+            if log(rand()) < logRatio
+                yesno = true;
+                obj.accProb = obj.accProb + 1;
+            else
+                yesno = flase;
             end
         end
         
