@@ -74,4 +74,3 @@ classdef Metropolis
         end
      end
   end
-end
